@@ -1,7 +1,7 @@
 local M = {}
 
-local kitty = require("kitty-runner.kitty")
 local config = require("kitty-runner.config")
+local kitty = require("kitty-runner.kitty")
 
 function M.setup(opts)
 	config.set_options(opts)
@@ -29,7 +29,6 @@ end
 
 function M.launch(command, location)
 	location = location or config.options.launch.default_location
-
 	kitty.launch(command, location)
 end
 
