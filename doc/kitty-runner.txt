@@ -7,6 +7,7 @@ This plugin allows to use kitty terminal as runner for commands.
 kitty-runner.open_runner({location})
 
     Open the runner (if it doesn't already exist) in {location}. {location} is an optional parameter. If not passed, it will use `config.runner.default_location`.
+    Locations can be found here: https://sw.kovidgoyal.net/kitty/remote-control/#cmdoption-kitty-launch-location
 
 
 					       *kitty-runner.send_to_runner()*
@@ -14,11 +15,13 @@ kitty-runner.send_to_runner({command}, {location})
 
     Send {command} to runner if the runner exists.  If the runner doesn't exist,
     it will create a runner instance in the specified {location} and send the command.
+    Locations can be found here: https://sw.kovidgoyal.net/kitty/remote-control/#cmdoption-kitty-launch-location
 
 
 						       *kitty-runner.launch()*
 kitty-runner.launch({command}, {location})
 
     Launch {command} in the specified {location}. Unlike `send_to_runner()`, `launch()` doesn't create a runner instance.
+    Locations can be found here: https://sw.kovidgoyal.net/kitty/remote-control/#cmdoption-kitty-launch-location
 
 vim:tw=78:ts=8:ft=help:norl:
