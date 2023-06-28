@@ -1,7 +1,7 @@
 local M = {}
 
 local config = require("kitty-runner.config")
-local kitty = require("kitty-runner.kitty")
+local kitty = require("kitty-runner.kitty") -- kitty adapter
 
 function M.setup(opts)
 	config.set_options(opts)
@@ -19,6 +19,7 @@ function M.send_to_runner(command, location)
 	location = location or config.options.runner.default_location
 
 	if not kitty.is_runner_exists(kitty.runner_uuid) then
+		-- If runner not exists - create runner, and run command with delay
 		kitty.open_runner(location, function(status)
 			vim.defer_fn(function() kitty.send_to_runner(kitty.runner_uuid, command) end, config.options.runner.delay)
 		end)

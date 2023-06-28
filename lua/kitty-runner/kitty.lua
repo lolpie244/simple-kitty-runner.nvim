@@ -10,6 +10,7 @@ function M.is_runner_exists(id)
 		return false
 	end
 
+	-- run kitty @ ls for getting all windows, and search line that contains "NVIM_KITTY_RUNNER": "runner_id"
 	local command = string.format([[kitty @ ls | grep -c '"NVIM_KITTY_RUNNER": *"%s"']], id)
 	local handle = io.popen(command)
 	local window_exists = handle:read("n")
