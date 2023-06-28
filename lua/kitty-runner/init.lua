@@ -8,7 +8,8 @@ function M.setup(opts)
 end
 
 function M.open_runner(location)
-	location = location or config.options.runner.default_location
+	location = (location ~= "" and location) or config.options.runner.default_location
+	location = location:match("^%s*(.-)%s*$")
 
 	if not kitty.is_runner_exists(kitty.runner_uuid) then
 		kitty.open_runner(location)
