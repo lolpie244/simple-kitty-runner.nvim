@@ -3,7 +3,7 @@ local config = {}
 config.options = {
 	runner = {
 		default_location = "hsplit", -- default location of runner. Docs: https://sw.kovidgoyal.net/kitty/remote-control/#cmdoption-kitty-launch-location
-		delay = 70,             -- delay between opening runner and sending command
+		delay = 0,             -- delay between opening runner and sending command
 		extra_open_runner_args = {}, -- extra arguments for opening runner, Docs: https://sw.kovidgoyal.net/kitty/remote-control/#id14
 		extra_send_command_args = {}, -- extra arguments for sending command to runner, docs: https://sw.kovidgoyal.net/kitty/remote-control/#id22
 	},

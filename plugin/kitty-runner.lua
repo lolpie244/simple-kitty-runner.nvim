@@ -21,4 +21,4 @@ end, { nargs = 1 })
 
 command("KittyLaunch", function(opts)
 	require("kitty-runner").launch(opts.args)
-end, {})
+end, { nargs = 1 })

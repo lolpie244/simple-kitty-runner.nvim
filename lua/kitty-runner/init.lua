@@ -34,5 +34,4 @@ function M.launch(command, location)
 	kitty.launch(command, location)
 end
 
-
 return M

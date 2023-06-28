@@ -22,7 +22,12 @@ end
 function M.open_runner(location, exit_function)
 	M.runner_uuid = utils.get_uuid()
 	local options = {
-		args = { "@", "launch", "--location", location, "--env", "NVIM_KITTY_RUNNER=" .. M.runner_uuid,
+		args = {
+			"@", "launch",
+			"--cwd", "current",
+			"--location", location,
+			"--env", "NVIM_KITTY_RUNNER=" .. M.runner_uuid,
+			"--env", "PATH=" .. vim.fn.getenv("PATH"),
 			table.unpack(config.options.runner.extra_open_runner_args)
 		},
 	}
@@ -34,7 +39,11 @@ function M.send_to_runner(runner_uuid, command)
 	table.insert(extra_args, command .. "\\x0d")
 
 	local options = {
-		args = { "@", "send-text", "--match", "env:NVIM_KITTY_RUNNER=" .. runner_uuid, table.unpack(extra_args) }
+		args = {
+			"@", "send-text",
+			"--match", "env:NVIM_KITTY_RUNNER=" .. runner_uuid,
+			table.unpack(extra_args)
+		}
 	}
 
 	loop.spawn("kitty", options)
@@ -45,7 +54,14 @@ function M.launch(command, location)
 	table.insert(extra_args, command)
 
 	local options = {
-		args = { "@", "launch", "--hold", "--location", location, table.unpack(extra_args) }
+		args = {
+			"@", "launch",
+			"--hold",
+			"--cwd", "current",
+			"--env", "PATH=" .. vim.fn.getenv("PATH"),
+			"--location", location,
+			table.unpack(vim.split(command, " ")) 
+		}
 	}
 	loop.spawn("kitty", options)
 end
