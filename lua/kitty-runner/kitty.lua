@@ -5,6 +5,16 @@ local config = require("kitty-runner.config")
 table.unpack = table.unpack or unpack
 
 
+local function get_env_variables(variables)
+	-- Return env variables in format: {"--env", "key1=val1", "--env", "key2=val2", ... }
+	local result = {}
+	for _, variable in pairs(variables) do
+		table.insert(result, "--env")
+		table.insert(result, string.format("%s=%s", variable, vim.fn.getenv(variable)))
+	end
+	return result
+end
+
 function M.is_runner_exists(id)
 	if id == nil then
 		return false
@@ -22,46 +32,45 @@ end
 function M.open_runner(location, exit_function)
 	M.runner_uuid = utils.get_uuid()
 	local options = {
-		args = {
-			"@", "launch",
-			"--cwd", "current",
-			"--location", location,
-			"--env", "NVIM_KITTY_RUNNER=" .. M.runner_uuid,
-			"--env", "PATH=" .. vim.fn.getenv("PATH"),
-			table.unpack(config.options.runner.extra_open_runner_args)
-		},
+		args = utils.merge_arrays({
+				"@", "launch",
+				"--cwd", "current",
+				"--location", location,
+				"--env", "NVIM_KITTY_RUNNER=" .. M.runner_uuid
+			},
+			get_env_variables(config.options.runner.env_to_copy),
+			config.options.runner.extra_open_runner_args
+		)
 	}
 	loop.spawn("kitty", options, exit_function)
 end
 
 function M.send_to_runner(runner_uuid, command)
-	local extra_args = utils.copy(config.options.runner.extra_send_command_args)
-	table.insert(extra_args, command .. "\\x0d")
-
 	local options = {
-		args = {
-			"@", "send-text",
-			"--match", "env:NVIM_KITTY_RUNNER=" .. runner_uuid,
-			table.unpack(extra_args)
-		}
+		args = utils.merge_arrays({
+				"@", "send-text",
+				"--match", "env:NVIM_KITTY_RUNNER=" .. runner_uuid
+			},
+			utils.copy(config.options.runner.extra_send_command_args),
+			{ command .. "\\x0d" }
+		)
 	}
 
 	loop.spawn("kitty", options)
 end
 
 function M.launch(command, location)
-	local extra_args = utils.copy(config.options.launch.extra_launch_args)
-	table.insert(extra_args, command)
-
 	local options = {
-		args = {
-			"@", "launch",
-			"--hold",
-			"--cwd", "current",
-			"--env", "PATH=" .. vim.fn.getenv("PATH"),
-			"--location", location,
-			table.unpack(vim.split(command, " ")) 
-		}
+		args = utils.merge_arrays({
+				"@", "launch",
+				"--hold",
+				"--cwd", "current",
+				"--location", location,
+			},
+			get_env_variables(config.options.launch.env_to_copy),
+			utils.copy(config.options.launch.extra_launch_args),
+			vim.split(command, " ")
+		)
 	}
 	loop.spawn("kitty", options)
 end

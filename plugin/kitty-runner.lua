@@ -16,9 +16,9 @@ end, {
 
 command("KittySendToRunner", function(opts)
 	require("kitty-runner").send_to_runner(opts.args)
-end, { nargs = 1 })
+end, { nargs = 1, complete = "shellcmd" })
 
 
 command("KittyLaunch", function(opts)
 	require("kitty-runner").launch(opts.args)
-end, { nargs = 1 })
+end, { nargs = 1, complete = "shellcmd" })
