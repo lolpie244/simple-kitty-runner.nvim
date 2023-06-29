@@ -6,7 +6,20 @@
 	Use kitty terminal as runner for the commands directly from neovim
 </p>
 
-[simple-kitty-runner-demo.webm](https://github.com/lolpie244/simple-kitty-runner.nvim/assets/86479624/cd5df266-ba80-452d-abd5-672cd4ea7899)
+
+
+https://github.com/lolpie244/simple-kitty-runner.nvim/assets/86479624/f1b22912-dd23-4172-b2fc-166d598d77f2
+
+
+<details>
+<summary>Table of Contents</summary>
+	<li><a href="#installation">Installation</a></li>
+  <li><a href="#configuration">Configuration</a></li>
+	<li><a href="#commands">Commands</a></li>
+	<li><a href="#api">API</a></li>
+	<li><a href="#goal">Goal</a></li>
+</details>
+
 
 ## Installation
 Install the plugin with your favourite package manager:
@@ -34,6 +47,7 @@ end)
 </details>
 
 ## Configuration
+
 ``` lua
 require("kitty-runner").setup({
 	runner = {
@@ -46,7 +60,7 @@ require("kitty-runner").setup({
 		-- extra arguments for sending command to runner, docs: https://sw.kovidgoyal.net/kitty/remote-control/#id22
 		extra_send_command_args = {},
 		-- environment variables, that will be copy to the runner instance
-		env_to_copy = { "PATH", "VIRTUAL_ENV" }
+		env_to_copy = { "PATH" }
 	},
 	launch = {
 		-- default location of launch result. Docs: https://sw.kovidgoyal.net/kitty/remote-control/#cmdoption-kitty-launch-location
@@ -54,11 +68,12 @@ require("kitty-runner").setup({
 		-- extra arguments for launching to runner. Docs: https://sw.kovidgoyal.net/kitty/remote-control/#cmdoption-kitty-launch-location
 		extra_launch_args = {},
 		-- environment variables, that will be copy to the launcher instance
-		env_to_copy = { "PATH", "VIRTUAL_ENV" },
+		env_to_copy = { "PATH" },
 	}
 
 })
 ```
+
 ## Commands
 
 | Command                       | Description                                                   |
@@ -73,3 +88,12 @@ require("kitty-runner").setup({
   Send *{command}* to the runner. Opens runner in *{location}*(or in default_location, if location isn't passed) if runner doesn't exists
 * `require("kitty-runner").launch({command}, {location})`\
   Launch *{command}* in *{location}* (or in default location, if location isn't passed)
+## Goal
+The main goal of this plugin is to provide an API that allows sending commands to kitty via Lua code and keymaps. For example, it can be used in a simple keymap that runs the current Python file:
+```lua
+function Run()
+	local command = string.format("python %s", vim.fn.expand('%:p'))
+	require("kitty-runner").send_to_runner(command)
+end
+keymap("n", "<Leader>r", "<cmd>lua Run()<CR>", opts)
+```
