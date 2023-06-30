@@ -56,7 +56,7 @@ require("kitty-runner").setup({
 		-- delay between opening runner and sending command.
 		delay = 0,
 		-- extra arguments for opening runner, Docs: https://sw.kovidgoyal.net/kitty/remote-control/#id14
-		extra_open_runner_args = {},
+		extra_open_runner_args = { "--dont-take-focus" },
 		-- extra arguments for sending command to runner, docs: https://sw.kovidgoyal.net/kitty/remote-control/#id22
 		extra_send_command_args = {},
 		-- environment variables, that will be copy to the runner instance
