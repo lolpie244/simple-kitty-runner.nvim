@@ -32,4 +32,17 @@ function utils.merge_arrays(...)
 	return mergedArray
 end
 
+function utils.split_respecting_quotes(s, quotes, delimeter)
+	quotes = quotes or '""'
+	delimeter = delimeter or ' '
+	local result = {}
+
+	for match in s:gsub('%b' .. quotes, function(x) return x:gsub(delimeter, '@') end):gmatch(string.format('[^%s]+', delimeter)) do
+		local res = match:gsub('@', ' ')
+		table.insert(result, res)
+	end
+
+	return result
+end
+
 return utils

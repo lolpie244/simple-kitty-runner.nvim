@@ -73,7 +73,7 @@ function M.launch(command, location)
 			},
 			get_env_variables(config.options.launch.env_to_copy),
 			utils.copy(config.options.launch.extra_launch_args),
-			vim.split(command, " ")
+			utils.split_respecting_quotes(command)
 		)
 	}
 	loop.spawn("kitty", options)
