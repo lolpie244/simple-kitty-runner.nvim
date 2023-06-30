@@ -22,3 +22,8 @@ end, { nargs = 1, complete = "shellcmd" })
 command("KittyLaunch", function(opts)
 	require("kitty-runner").launch(opts.args)
 end, { nargs = 1, complete = "shellcmd" })
+
+
+command("KittyClear", function()
+	require("kitty-runner").clear()
+end, {})

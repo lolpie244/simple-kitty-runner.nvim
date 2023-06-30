@@ -46,6 +46,10 @@ function M.open_runner(location, exit_function)
 end
 
 function M.send_to_runner(runner_uuid, command)
+	if runner_uuid == nil then
+		return
+	end
+
 	local options = {
 		args = utils.merge_arrays({
 				"@", "send-text",
