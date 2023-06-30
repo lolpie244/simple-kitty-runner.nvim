@@ -81,6 +81,7 @@ require("kitty-runner").setup({
 | `KittyOpenRunner {location}`  | Open the runner in `{location}` (if not exists)              |
 | `KittySendToRunner {command}` | Send `{command}` to the runner. <br />Open new runner in default location, if it doesnt exists |
 | `KittyLaunch {command}`       | Launch `{command}` in default location                       |
+| `KittyClear`			| Send `clear` command to the runner|
 ## API
 * `require("kitty-runner").open_runner({location})` \
   Open new runner in *{location}*. If location is not passed - use *runner.default_location* from config
@@ -88,6 +89,8 @@ require("kitty-runner").setup({
   Send *{command}* to the runner. Opens runner in *{location}*(or in default_location, if location isn't passed) if runner doesn't exists
 * `require("kitty-runner").launch({command}, {location})`\
   Launch *{command}* in *{location}* (or in default location, if location isn't passed)
+* `require("kitty-runner").clear()` \
+  Send clear command to the runner
 ## Goal
 The main goal of this plugin is to provide an API that allows sending commands to kitty via Lua code and keymaps. For example, it can be used in a simple keymap that runs the current Python file:
 ```lua
