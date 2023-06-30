@@ -34,4 +34,8 @@ function M.launch(command, location)
 	kitty.launch(command, location)
 end
 
+function M.clear()
+	kitty.send_to_runner(kitty.runner_uuid, "clear")
+end
+
 return M
