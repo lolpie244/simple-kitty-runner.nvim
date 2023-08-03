@@ -67,13 +67,13 @@ function M.launch(command, location)
 	local options = {
 		args = utils.merge_arrays({
 				"@", "launch",
-				"--hold",
 				"--cwd", "current",
 				"--location", location,
 			},
 			get_env_variables(config.options.launch.env_to_copy),
 			utils.copy(config.options.launch.extra_launch_args),
-			{"sh", "-c", command}
+			{ "sh", "-c",
+				command .. [[; tput cup $LINES 0; echo -en "\033[0;32mPress any key to exit"; read -n 1 -s -r -p ""]] }
 		)
 	}
 	loop.spawn("kitty", options)
