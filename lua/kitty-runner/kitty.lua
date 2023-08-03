@@ -64,6 +64,12 @@ function M.send_to_runner(runner_uuid, command)
 end
 
 function M.launch(command, location)
+	local disable_cursor = [[tput civis]]
+	local press_to_continue = [[
+	echo
+	echo -en "\033[0;32mPress any key to exit"
+	read -rsn1
+]]
 	local options = {
 		args = utils.merge_arrays({
 				"@", "launch",
@@ -73,7 +79,7 @@ function M.launch(command, location)
 			get_env_variables(config.options.launch.env_to_copy),
 			utils.copy(config.options.launch.extra_launch_args),
 			{ "sh", "-c",
-				command .. [[; tput cup $LINES 0; echo -en "\033[0;32mPress any key to exit"; read -n 1 -s -r -p ""]] }
+				disable_cursor .. ";" .. command .. ";" .. press_to_continue }
 		)
 	}
 	loop.spawn("kitty", options)
