@@ -17,6 +17,7 @@ https://github.com/lolpie244/simple-kitty-runner.nvim/assets/86479624/f1b22912-d
   <li><a href="#configuration">Configuration</a></li>
 	<li><a href="#commands">Commands</a></li>
 	<li><a href="#api">API</a></li>
+	<li><a href="#ssh">SSH</a></li>
 	<li><a href="#goal">Goal</a></li>
 </details>
 
@@ -47,7 +48,6 @@ end)
 </details>
 
 ## Configuration
-
 ``` lua
 require("kitty-runner").setup({
 	runner = {
@@ -69,11 +69,13 @@ require("kitty-runner").setup({
 		extra_launch_args = {},
 		-- environment variables, that will be copy to the launcher instance
 		env_to_copy = { "PATH" },
-	}
+	},
+    -- socket where kitty is listening. See ssh section
+    kitty_listen_on = environment_var("KITTY_LISTEN_ON")
 
 })
 ```
-
+- - -
 ## Commands
 
 | Command                       | Description                                                   |
@@ -82,6 +84,7 @@ require("kitty-runner").setup({
 | `KittySendToRunner {command}` | Send `{command}` to the runner. <br />Open new runner in default location, if it doesnt exists |
 | `KittyLaunch {command}`       | Launch `{command}` in default location                       |
 | `KittyClear`			| Send `clear` command to the runner|
+- - -
 ## API
 * `require("kitty-runner").open_runner({location})` \
   Open new runner in *{location}*. If location is not passed - use *runner.default_location* from config
@@ -91,6 +94,32 @@ require("kitty-runner").setup({
   Launch *{command}* in *{location}* (or in default location, if location isn't passed)
 * `require("kitty-runner").clear()` \
   Send clear command to the runner
+- - -
+## SSH
+To work via ssh, plugin requires passing Unix socket from localhost to the server.
+
+You can achieve this using following command:
+```bash
+kitty +kitten ssh -R /tmp/forwarded:$(echo ${KITTY_LISTEN_ON} | sed "s/.*://g") <ssh_connection>
+```
+Where:
+* `kitty +kitten ssh` - built-in kitty terminal SSH, that allows using splints and tabs
+* `-R <socket_name_on_server>:<socket_name_on_localhost>` - passes the Unix socket from localhost to the server
+* `$(echo ${KITTY_LISTEN_ON} | sed "s/.*://g")` - retrieves the socket name of the current Kitty instance. This only works if listen_on is in Unix format: /tmp/...
+
+THE After accessing SSH server, you can check the correctness of the socket using command:
+```bash
+kitty @ --to unix:<socket_name_on_server> ls
+```
+
+If everything works correctly, set `kitty_listen_on` in the plugin config to `unix:<socket_name_on_server>`
+
+**Please note that <socket_name_on_server> should be replaced with the actual names of the socket you're using.**
+
+
+If you encounter an `"connection refused"` error during the second connection, try removing the `<socket_name_on_server>` file.
+
+- - -
 ## Goal
 The main goal of this plugin is to provide an API that allows sending commands to kitty via Lua code and keymaps. For example, it can be used in a simple keymap that runs the current Python file:
 ```lua
