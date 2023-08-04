@@ -21,7 +21,7 @@ function M.is_runner_exists(id)
 	end
 
 	-- run kitty @ ls for getting all windows, and search line that contains "NVIM_KITTY_RUNNER": "runner_id"
-	local command = string.format([[kitty @ ls | grep -c '"NVIM_KITTY_RUNNER": *"%s"']], id)
+	local command = string.format([[kitty @ --to %s ls | grep -c '"NVIM_KITTY_RUNNER": *"%s"']], config.options.kitty_listen_on, id)
 	local handle = io.popen(command)
 	local window_exists = handle:read("n")
 
@@ -34,6 +34,7 @@ function M.open_runner(location, exit_function)
 	local options = {
 		args = utils.merge_arrays({
 				"@", "launch",
+				"--to", config.options.kitty_listen_on,
 				"--cwd", "current",
 				"--location", location,
 				"--env", "NVIM_KITTY_RUNNER=" .. M.runner_uuid
@@ -53,6 +54,7 @@ function M.send_to_runner(runner_uuid, command)
 	local options = {
 		args = utils.merge_arrays({
 				"@", "send-text",
+				"--to", config.options.kitty_listen_on,
 				"--match", "env:NVIM_KITTY_RUNNER=" .. runner_uuid
 			},
 			utils.copy(config.options.runner.extra_send_command_args),
@@ -73,6 +75,7 @@ function M.launch(command, location)
 	local options = {
 		args = utils.merge_arrays({
 				"@", "launch",
+				"--to", config.options.kitty_listen_on,
 				"--cwd", "current",
 				"--location", location,
 			},
