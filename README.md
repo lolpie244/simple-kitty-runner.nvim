@@ -115,9 +115,10 @@ kitty @ --to unix:<socket_name_on_server> ls
 If everything works correctly, set `kitty_listen_on` in the plugin config to `unix:<socket_name_on_server>`
 
 **Please note that <socket_name_on_server> should be replaced with the actual names of the socket you're using.**
-- - -
+
+
 If you encounter an `"connection refused"` error during the second connection, try removing the `<socket_name_on_server>` file.
-```
+
 - - -
 ## Goal
 The main goal of this plugin is to provide an API that allows sending commands to kitty via Lua code and keymaps. For example, it can be used in a simple keymap that runs the current Python file:
