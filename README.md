@@ -117,9 +117,6 @@ If everything works correctly, set `kitty_listen_on` in the plugin config to `un
 **Please note that <socket_name_on_server> should be replaced with the actual names of the socket you're using.**
 - - -
 If you encounter an `"connection refused"` error during the second connection, try removing the `<socket_name_on_server>` file.
-Additionally, you can automatically remove the socket upon exiting the SSH server by adding the following line to the server's `.bashrc` (or any startup script):
-```bash
-function onexit { rm <socket_name_on_server> }; trap onexit EXIT
 ```
 - - -
 ## Goal
